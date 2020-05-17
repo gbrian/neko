@@ -173,7 +173,7 @@ export abstract class BaseClient extends EventEmitter<BaseEvents> {
     }
 
     this._peer = new RTCPeerConnection()
-    if (lite !== true) {
+    if (lite !== true && servers) {
       this._peer = new RTCPeerConnection({
         iceServers: [{ urls: servers }],
       })
