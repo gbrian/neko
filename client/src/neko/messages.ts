@@ -188,3 +188,9 @@ export interface AdminTargetPayload {
   id: string
   target?: string
 }
+
+/* AUTOMATION */
+export type RemoteServer = {
+  server: string,
+  port: number,
+}

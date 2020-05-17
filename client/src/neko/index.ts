@@ -20,6 +20,7 @@ import {
   ScreenResolutionPayload,
   AdminPayload,
   AdminTargetPayload,
+  RemoteServer,
 } from './messages'
 
 interface NekoEvents extends BaseEvents {}
@@ -41,11 +42,36 @@ export class NekoClient extends BaseClient implements EventEmitter<NekoEvents> {
     this.$accessor.chat.reset()
   }
 
+  params(): any {
+    return window.location.search
+            .substring(1)
+            .split("&")
+            .map(e => e.split("="))
+            .reduce((acc,b) => Object.assign(acc, {[b[0]]: b[1]}),{});
+  }
+
+  remoteServer(): RemoteServer {
+    const {
+      server,
+      port,
+    } = this.params();
+    return {
+      server,
+      port,
+    };
+  }
+
   login(password: string, displayname: string) {
+    const {
+      server,
+      port,
+    } = this.params();
+    const host = server || location.host;
+    const sport = port || process.env.VUE_APP_SERVER_PORT;
     const url =
       process.env.NODE_ENV === 'development'
-        ? `ws://${location.host.split(':')[0]}:${process.env.VUE_APP_SERVER_PORT}/`
-        : `${/https/gi.test(location.protocol) ? 'wss' : 'ws'}://${location.host}/`
+        ? `ws://${host.split(':')[0]}:${sport}/`
+        : `${/https/gi.test(host) ? 'wss' : 'ws'}://${host}/`
 
     this.connect(url, password, displayname)
   }
