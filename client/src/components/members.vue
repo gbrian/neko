@@ -4,7 +4,7 @@
       <ul class="members-list">
         <li v-if="member">
           <div :class="[{ host: member.id === host }, 'self', 'member']">
-            <img :src="`https://api.adorable.io/avatars/50/${member.displayname}.png`" />
+            <camera :member="member"/>
           </div>
         </li>
         <template v-for="(member, index) in members">
@@ -159,6 +159,7 @@
 <script lang="ts">
   import { Component, Ref, Watch, Vue } from 'vue-property-decorator'
   import { Member } from '~/neko/types'
+  import Camera from '~/components/camera.vue'
 
   import Content from './context.vue'
 
@@ -166,6 +167,7 @@
     name: 'neko-members',
     components: {
       'neko-context': Content,
+      'camera': Camera,
     },
   })
   export default class extends Vue {
